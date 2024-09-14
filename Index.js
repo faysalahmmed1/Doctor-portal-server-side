@@ -40,7 +40,7 @@ function varifyJWT(req, res, next) {
 
 async function run() {
     try {
-        await client.close();
+        // await client.close();
 
         const serviceCollection = client.db('doctors_portal').collection('services');
         const bookingCollection = client.db('doctors_portal').collection('booking');
