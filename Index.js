@@ -21,26 +21,12 @@ const client = new MongoClient(uri, {
     }
 });
 
-function varifyJWT(req, res, next) {
-    const authHeard = req.headers.authorizaton;
-    if (authHeard) {
-        return res.status(401).send({ message: 'UnAuthorized access' });
-    }
 
-    const token = authHeard.split('')[1];
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
-        if (err) {
-            return res.status(403).send({ message: 'Forbidden Access' })
-        }
-        req.decoded = decoded;
-        next();
-    });
-}
 
 
 async function run() {
     try {
-        // await client.close();
+        
 
         const serviceCollection = client.db('doctors_portal').collection('services');
         const bookingCollection = client.db('doctors_portal').collection('booking');
@@ -50,6 +36,22 @@ async function run() {
         app.get('/', (req, res) => {
             res.send('The Server is Runnig!!')
         });
+
+        function varifyJWT(req, res, next) {
+            const authHeard = req.headers.authorizaton;
+            if (authHeard) {
+                return res.status(401).send({ message: 'UnAuthorized access' });
+            }
+        
+            const token = authHeard.split('')[1];
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+                if (err) {
+                    return res.status(403).send({ message: 'Forbidden Access' })
+                }
+                req.decoded = decoded;
+                next();
+            });
+        }
 
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
