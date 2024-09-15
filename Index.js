@@ -47,6 +47,9 @@ async function run() {
         const userCollection = client.db('doctors_portal').collection('users');
         const doctorsCollection = client.db('doctors_portal').collection('doctors');
 
+        app.get('/', (req, res) => {
+            res.send('The Server is Runnig!!')
+        });
 
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
@@ -122,18 +125,11 @@ async function run() {
         })
     }
     finally {
-        // await client.connect();
-        // console.log('final database connected');
 
     }
 
 }
 run().catch(console.dir);
-
-
-app.get('/', (req, res) => {
-    res.send('The Server is Runnig!!')
-})
 
 app.listen(port, () => {
     console.log(`Doctor Portal listening on port ${port}`)
